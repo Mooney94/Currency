@@ -34,7 +34,21 @@ class ViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var usdValueLabel: UILabel!
     @IBOutlet weak var usdFlagLabel: UILabel!
     
+    @IBOutlet weak var jpySymbolLabel: UILabel!
+    @IBOutlet weak var jpyValueLabel: UILabel!
+    @IBOutlet weak var jpyFlagLabel: UILabel!
     
+    @IBOutlet weak var audSymbolLabel: UILabel!
+    @IBOutlet weak var audValueLabel: UILabel!
+    @IBOutlet weak var audFlagLabel: UILabel!
+    
+    @IBOutlet weak var cadSymbolLabel: UILabel!
+    @IBOutlet weak var cadValueLabel: UILabel!
+    @IBOutlet weak var cadFlagLabel: UILabel!
+    
+    @IBOutlet weak var plnSymbolLabel: UILabel!
+    @IBOutlet weak var plnValueLabel: UILabel!
+    @IBOutlet weak var plnFlagLabel: UILabel!
     
     
     override func viewDidLoad() {
@@ -46,8 +60,9 @@ class ViewController: UIViewController, UITextFieldDelegate {
         self.createCurrencyDictionary()
         
         // get latest currency values
-        getConversionTable()
-        convertValue = 1
+        getTable()
+      //  getConversionTable()
+      //  convertValue = 1
         
         // set up base currency screen items
         baseTextField.text = String(format: "%.02f", baseCurrency.rate)
@@ -55,9 +70,9 @@ class ViewController: UIViewController, UITextFieldDelegate {
         baseFlag.text = baseCurrency.flag
         
         // set up last updated date
-        let dateformatter = DateFormatter()
-        dateformatter.dateFormat = "dd/MM/yyyy hh:mm a"
-        lastUpdatedDateLabel.text = dateformatter.string(from: lastUpdatedDate)
+       // let dateformatter = DateFormatter()
+       // dateformatter.dateFormat = "dd/MM/yyyy hh:mm a"
+       // lastUpdatedDateLabel.text = dateformatter.string(from: lastUpdatedDate)
         
         // display currency info
         self.displayCurrencyInfo()
@@ -67,6 +82,14 @@ class ViewController: UIViewController, UITextFieldDelegate {
         baseTextField.delegate = self
         
         self.convert(self)
+    }
+    
+    func getTable(){
+        getConversionTable()
+        convertValue = 1
+        let dateformatter = DateFormatter()
+        dateformatter.dateFormat = "dd/MM/yyyy hh:mm a"
+        lastUpdatedDateLabel.text = dateformatter.string(from: lastUpdatedDate)
     }
     
     override func didReceiveMemoryWarning() {
@@ -79,6 +102,10 @@ class ViewController: UIViewController, UITextFieldDelegate {
         //self.currencyDict[name] = c
         currencyDict["GBP"] = Currency(name:"GBP", rate:1, flag:"🇬🇧", symbol: "£")
         currencyDict["USD"] = Currency(name:"USD", rate:1, flag:"🇺🇸", symbol: "$")
+        currencyDict["JPY"] = Currency(name:"JPY", rate:1, flag:"🇯🇵", symbol: "¥")
+        currencyDict["AUD"] = Currency(name:"AUD", rate:1, flag:"🇦🇺", symbol: "$")
+        currencyDict["CAD"] = Currency(name:"CAD", rate:1, flag:"🇨🇦", symbol: "$")
+        currencyDict["PLN"] = Currency(name:"PLN", rate:1, flag:"🇵🇱", symbol: "zł")
     }
     
     func displayCurrencyInfo() {
@@ -92,6 +119,26 @@ class ViewController: UIViewController, UITextFieldDelegate {
             usdSymbolLabel.text = c.symbol
             usdValueLabel.text = String(format: "%.02f", c.rate)
             usdFlagLabel.text = c.flag
+        }
+       if let c = currencyDict["JPY"]{
+            jpySymbolLabel.text = c.symbol
+            jpyValueLabel.text = String(format: "%.02f", c.rate)
+            jpyFlagLabel.text = c.flag
+        }
+        if let c = currencyDict["AUD"]{
+            audSymbolLabel.text = c.symbol
+            audValueLabel.text = String(format: "%.02f", c.rate)
+            audFlagLabel.text = c.flag
+        }
+        if let c = currencyDict["CAD"]{
+            cadSymbolLabel.text = c.symbol
+            cadValueLabel.text = String(format: "%.02f", c.rate)
+            cadFlagLabel.text = c.flag
+        }
+        if let c = currencyDict["PLN"]{
+            plnSymbolLabel.text = c.symbol
+            plnValueLabel.text = String(format: "%.02f", c.rate)
+            plnFlagLabel.text = c.flag
         }
     }
     
@@ -142,6 +189,22 @@ class ViewController: UIViewController, UITextFieldDelegate {
                                 let c:Currency  = self.currencyDict["GBP"]!
                                 c.rate = rate!
                                 self.currencyDict["GBP"] = c
+                            case "JPY":
+                                let c:Currency = self.currencyDict["JPY"]!
+                                c.rate = rate!
+                                self.currencyDict["JPY"] = c
+                            case "AUD":
+                                let c:Currency = self.currencyDict["AUD"]!
+                                c.rate = rate!
+                                self.currencyDict["AUD"] = c
+                            case "CAD":
+                                let c:Currency = self.currencyDict["CAD"]!
+                                c.rate = rate!
+                                self.currencyDict["CAD"] = c
+                            case "PLN":
+                                let c:Currency = self.currencyDict["PLN"]!
+                                c.rate = rate!
+                                self.currencyDict["PLN"] = c
                             default:
                                 print("Ignoring currency: \(String(describing: rate))")
                             }
@@ -169,6 +232,10 @@ class ViewController: UIViewController, UITextFieldDelegate {
     @IBAction func convert(_ sender: Any) {
         var resultGBP = 0.0
         var resultUSD = 0.0
+        var resultJPY = 0.0
+        var resultAUD = 0.0
+        var resultCAD = 0.0
+        var resultPLN = 0.0
         
         if let euro = Double(baseTextField.text!) {
             convertValue = euro
@@ -178,6 +245,18 @@ class ViewController: UIViewController, UITextFieldDelegate {
             if let usd = self.currencyDict["USD"] {
                 resultUSD = convertValue * usd.rate
             }
+            if let jpy = self.currencyDict["JPY"] {
+                resultJPY = convertValue * jpy.rate
+            }
+            if let aud = self.currencyDict["AUD"] {
+                resultAUD = convertValue * aud.rate
+            }
+            if let cad = self.currencyDict["CAD"] {
+                resultCAD = convertValue * cad.rate
+            }
+            if let pln = self.currencyDict["PLN"] {
+                resultPLN = convertValue * pln.rate
+            }
         }
         //GBP
         
@@ -185,8 +264,15 @@ class ViewController: UIViewController, UITextFieldDelegate {
         
         gbpValueLabel.text = String(format: "%.02f", resultGBP)
         usdValueLabel.text = String(format: "%.02f", resultUSD)
+        jpyValueLabel.text = String(format: "%.02f", resultJPY)
+        audValueLabel.text = String(format: "%.02f", resultAUD)
+        cadValueLabel.text = String(format: "%.02f", resultCAD)
+        plnValueLabel.text = String(format: "%.02f", resultPLN)
     }
     
+    @IBAction func refresh(_ sender: Any) {
+        getTable()
+    }
     /*
      override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
      // Get the new view controller using segue.destinationViewController.
