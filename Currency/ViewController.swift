@@ -26,6 +26,10 @@ class ViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var baseFlag: UILabel!
     @IBOutlet weak var lastUpdatedDateLabel: UILabel!
     
+    @IBOutlet weak var eurSymbolLabel: UILabel!
+    @IBOutlet weak var eurValueLabel: UILabel!
+    @IBOutlet weak var eurFlagLabel: UILabel!
+    
     @IBOutlet weak var gbpSymbolLabel: UILabel!
     @IBOutlet weak var gbpValueLabel: UILabel!
     @IBOutlet weak var gbpFlagLabel: UILabel!
@@ -49,6 +53,14 @@ class ViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var plnSymbolLabel: UILabel!
     @IBOutlet weak var plnValueLabel: UILabel!
     @IBOutlet weak var plnFlagLabel: UILabel!
+    
+    @IBOutlet weak var dkkSymbolLabel: UILabel!
+    @IBOutlet weak var dkkValueLabel: UILabel!
+    @IBOutlet weak var dkkFlagLabel: UILabel!
+    
+    @IBOutlet weak var bgnSymbolLabel: UILabel!
+    @IBOutlet weak var bgnValueLabel: UILabel!
+    @IBOutlet weak var bgnFlagLabel: UILabel!
     
     
     override func viewDidLoad() {
@@ -82,6 +94,27 @@ class ViewController: UIViewController, UITextFieldDelegate {
         baseTextField.delegate = self
         
         self.convert(self)
+        
+        // add done button to keyboard
+        addDoneButton()
+    }
+    
+    func addDoneButton(){
+        let doneToolbar: UIToolbar = UIToolbar(frame: CGRect(x: 0, y: 0, width: 320, height: 50))
+        doneToolbar.barStyle = UIBarStyle.default
+        let flexSpace = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.flexibleSpace, target: self, action: nil)
+        let done : UIBarButtonItem = UIBarButtonItem(title: "Done", style: UIBarButtonItemStyle.done, target: self, action: #selector(ViewController.doneButtonAction))
+        var items = [UIBarButtonItem]()
+        items.append(flexSpace)
+        items.append(done)
+        doneToolbar.items = items
+        doneToolbar.sizeToFit()
+        
+        self.baseTextField.inputAccessoryView = doneToolbar
+    }
+    
+    @objc func doneButtonAction(){
+        self.baseTextField.resignFirstResponder()
     }
     
     func getTable(){
@@ -100,16 +133,23 @@ class ViewController: UIViewController, UITextFieldDelegate {
     func createCurrencyDictionary(){
         //let c:Currency = Currency(name: name, rate: rate!, flag: flag, symbol: symbol)!
         //self.currencyDict[name] = c
+        currencyDict["EUR"] = Currency(name:"EUR", rate:1, flag:"🇪🇺", symbol: "€")
         currencyDict["GBP"] = Currency(name:"GBP", rate:1, flag:"🇬🇧", symbol: "£")
         currencyDict["USD"] = Currency(name:"USD", rate:1, flag:"🇺🇸", symbol: "$")
         currencyDict["JPY"] = Currency(name:"JPY", rate:1, flag:"🇯🇵", symbol: "¥")
         currencyDict["AUD"] = Currency(name:"AUD", rate:1, flag:"🇦🇺", symbol: "$")
         currencyDict["CAD"] = Currency(name:"CAD", rate:1, flag:"🇨🇦", symbol: "$")
         currencyDict["PLN"] = Currency(name:"PLN", rate:1, flag:"🇵🇱", symbol: "zł")
+        currencyDict["DKK"] = Currency(name:"DKK", rate:1, flag:"🇩🇰", symbol: "kr")
+        currencyDict["BGN"] = Currency(name:"BGN", rate:1, flag:"🇧🇬", symbol: "лв")
     }
     
     func displayCurrencyInfo() {
-        // GBP
+        if let c = currencyDict["EUR"]{
+            eurSymbolLabel.text = c.symbol
+            eurValueLabel.text = String(format: "%.02f", c.rate)
+            eurFlagLabel.text = c.flag
+        }
         if let c = currencyDict["GBP"]{
             gbpSymbolLabel.text = c.symbol
             gbpValueLabel.text = String(format: "%.02f", c.rate)
@@ -139,6 +179,16 @@ class ViewController: UIViewController, UITextFieldDelegate {
             plnSymbolLabel.text = c.symbol
             plnValueLabel.text = String(format: "%.02f", c.rate)
             plnFlagLabel.text = c.flag
+        }
+        if let c = currencyDict["DKK"]{
+            dkkSymbolLabel.text = c.symbol
+            dkkValueLabel.text = String(format: "%.02f", c.rate)
+            dkkFlagLabel.text = c.flag
+        }
+        if let c = currencyDict["BGN"]{
+            bgnSymbolLabel.text = c.symbol
+            bgnValueLabel.text = String(format: "%.02f", c.rate)
+            bgnFlagLabel.text = c.flag
         }
     }
     
@@ -205,6 +255,18 @@ class ViewController: UIViewController, UITextFieldDelegate {
                                 let c:Currency = self.currencyDict["PLN"]!
                                 c.rate = rate!
                                 self.currencyDict["PLN"] = c
+                            case "DKK":
+                                let c:Currency = self.currencyDict["DKK"]!
+                                c.rate = rate!
+                                self.currencyDict["DKK"] = c
+                            case "EUR":
+                                let c:Currency = self.currencyDict["EUR"]!
+                                c.rate = rate!
+                                self.currencyDict["EUR"] = c
+                            case "BGN":
+                                let c:Currency = self.currencyDict["BGN"]!
+                                c.rate = rate!
+                                self.currencyDict["BGN"] = c
                             default:
                                 print("Ignoring currency: \(String(describing: rate))")
                             }
@@ -236,6 +298,9 @@ class ViewController: UIViewController, UITextFieldDelegate {
         var resultAUD = 0.0
         var resultCAD = 0.0
         var resultPLN = 0.0
+        var resultDKK = 0.0
+        var resultEUR = 0.0
+        var resultBGN = 0.0
         
         if let euro = Double(baseTextField.text!) {
             convertValue = euro
@@ -257,6 +322,15 @@ class ViewController: UIViewController, UITextFieldDelegate {
             if let pln = self.currencyDict["PLN"] {
                 resultPLN = convertValue * pln.rate
             }
+            if let dkk = self.currencyDict["DKK"] {
+                resultDKK = convertValue * dkk.rate
+            }
+            if let eur = self.currencyDict["EUR"] {
+                resultEUR = convertValue * eur.rate
+            }
+            if let bgn = self.currencyDict["BGN"] {
+                resultBGN = convertValue * bgn.rate
+            }
         }
         //GBP
         
@@ -268,6 +342,9 @@ class ViewController: UIViewController, UITextFieldDelegate {
         audValueLabel.text = String(format: "%.02f", resultAUD)
         cadValueLabel.text = String(format: "%.02f", resultCAD)
         plnValueLabel.text = String(format: "%.02f", resultPLN)
+        dkkValueLabel.text = String(format: "%.02f", resultDKK)
+        eurValueLabel.text = String(format: "%.02f", resultEUR)
+        bgnValueLabel.text = String(format: "%.02f", resultBGN)
     }
     
     @IBAction func refresh(_ sender: Any) {
