@@ -62,9 +62,14 @@ class ViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var bgnValueLabel: UILabel!
     @IBOutlet weak var bgnFlagLabel: UILabel!
     
+    @IBOutlet weak var activityView: UIView!
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+        
         // Do any additional setup after loading the view, typically from a nib.
         // print("currencyDict has \(self.currencyDict.count) entries")
         
@@ -114,15 +119,20 @@ class ViewController: UIViewController, UITextFieldDelegate {
     }
     
     @objc func doneButtonAction(){
+        convert()
         self.baseTextField.resignFirstResponder()
     }
     
     func getTable(){
         getConversionTable()
         convertValue = 1
+        baseTextField.text = String(format: "%.02f", baseCurrency.rate)
+        baseSymbol.text = baseCurrency.symbol
+        baseFlag.text = baseCurrency.flag
         let dateformatter = DateFormatter()
         dateformatter.dateFormat = "dd/MM/yyyy hh:mm a"
         lastUpdatedDateLabel.text = dateformatter.string(from: lastUpdatedDate)
+        convert()
     }
     
     override func didReceiveMemoryWarning() {
@@ -202,7 +212,7 @@ class ViewController: UIViewController, UITextFieldDelegate {
         request.httpMethod = "GET"
         
         let indicator = UIActivityIndicatorView(activityIndicatorStyle: .gray)
-        indicator.center = view.center
+        indicator.center = activityView.center
         view.addSubview(indicator)
         indicator.startAnimating()
         
@@ -291,7 +301,7 @@ class ViewController: UIViewController, UITextFieldDelegate {
         
     }
     
-    @IBAction func convert(_ sender: Any) {
+    @IBAction func convert(_ sender: Any? = nil) {
         var resultGBP = 0.0
         var resultUSD = 0.0
         var resultJPY = 0.0
@@ -350,6 +360,22 @@ class ViewController: UIViewController, UITextFieldDelegate {
     @IBAction func refresh(_ sender: Any) {
         getTable()
     }
+    
+    @objc func keyboardWillShow(notification: NSNotification) {
+        if let keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue{
+            if self.view.frame.origin.y == 0{
+                self.view.frame.origin.y -= keyboardSize.height
+            }
+        }
+    }
+    
+    @objc func keyboardWillHide(notification: NSNotification){
+        if let keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue{
+            if self.view.frame.origin.y != 0{
+                self.view.frame.origin.y += keyboardSize.height
+            }
+        }
+    }
     /*
      override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
      // Get the new view controller using segue.destinationViewController.
@@ -357,7 +383,6 @@ class ViewController: UIViewController, UITextFieldDelegate {
      
      }
      */
-    
     
 }
 
