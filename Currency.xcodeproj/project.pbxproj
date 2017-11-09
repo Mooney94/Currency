@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		95C024561FB4C3A100EF5156 /* arrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 95C024551FB4C3A100EF5156 /* arrow.png */; };
 		95F00B5C1FB3A2B00073CBAA /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95F00B5B1FB3A2B00073CBAA /* ViewController.swift */; };
 		95F00B5F1FB3A6570073CBAA /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 95F00B5D1FB3A6570073CBAA /* Main.storyboard */; };
 		FF66C5521FA34F4D00E9354E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF66C5511FA34F4D00E9354E /* AppDelegate.swift */; };
@@ -17,6 +18,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		95C024551FB4C3A100EF5156 /* arrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = arrow.png; sourceTree = "<group>"; };
 		95F00B5B1FB3A2B00073CBAA /* ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		95F00B5E1FB3A6570073CBAA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		FF66C54E1FA34F4D00E9354E /* Currency.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Currency.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -65,6 +67,7 @@
 				FF66C5581FA34F4D00E9354E /* Assets.xcassets */,
 				FF66C55A1FA34F4D00E9354E /* LaunchScreen.storyboard */,
 				FF66C55D1FA34F4D00E9354E /* Info.plist */,
+				95C024551FB4C3A100EF5156 /* arrow.png */,
 				FF66C5651FA3531400E9354E /* README.md */,
 			);
 			path = Currency;
@@ -132,6 +135,7 @@
 				FF66C55C1FA34F4D00E9354E /* LaunchScreen.storyboard in Resources */,
 				FF66C5591FA34F4D00E9354E /* Assets.xcassets in Resources */,
 				FF66C5661FA3531400E9354E /* README.md in Resources */,
+				95C024561FB4C3A100EF5156 /* arrow.png in Resources */,
 				95F00B5F1FB3A6570073CBAA /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

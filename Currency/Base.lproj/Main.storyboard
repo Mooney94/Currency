@@ -356,9 +356,9 @@
                                     <constraint firstItem="tq1-oM-6hN" firstAttribute="width" secondItem="SZQ-sd-p41" secondAttribute="width" id="dBZ-Yo-MwZ"/>
                                 </constraints>
                             </scrollView>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Chd-YC-XQl">
-                                <rect key="frame" x="323" y="1145" width="53" height="30"/>
-                                <state key="normal" title="Refresh"/>
+                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Chd-YC-XQl">
+                                <rect key="frame" x="323" y="1145" width="30" height="30"/>
+                                <state key="normal" title="Refresh" image="arrow.png"/>
                                 <connections>
                                     <action selector="refresh:" destination="BYZ-38-t0r" eventType="touchUpInside" id="r6D-m7-8Jt"/>
                                 </connections>
@@ -475,4 +475,7 @@
             <point key="canvasLocation" x="24.637681159420293" y="31.793478260869566"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="arrow.png" width="30" height="30"/>
+    </resources>
 </document>
