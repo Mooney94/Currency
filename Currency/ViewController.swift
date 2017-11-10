@@ -3,6 +3,7 @@
 //  Currency
 //
 //  Created by Robert O'Connor on 18/10/2017.
+//  Modified by Aaron Mooney
 //  Copyright © 2017 WIT. All rights reserved.
 //
 
@@ -13,16 +14,12 @@ class ViewController: UIViewController, UITextFieldDelegate, UIPickerViewDataSou
     //MARK Model holders
     var currencyDict:Dictionary = [String:Currency]()
     var currencyArray = [Currency]()
-    var curName : String! = ""
-    var curFlag: String! = ""
-    var curSymbol :String! = ""
     var baseCurrency:Currency? = nil
-    //var baseCurrency:Currency = Currency(name:curName, rate:curRate, flag:curFlag, symbol:curSymbol)!
     var lastUpdatedDate:Date = Date()
     
     var convertValue:Double = 0
     
-    let currencies = ["EUR","GBP","USD","JPY","AUD","CAD","PLN","DKK","BGN"]
+    let currencies = ["EUR","GBP","USD","JPY","AUD","CAD","PLN","BGN","DKK","CNY"]
     
     //MARK Outlets
     //@IBOutlet weak var convertedLabel: UILabel!
@@ -68,6 +65,10 @@ class ViewController: UIViewController, UITextFieldDelegate, UIPickerViewDataSou
     @IBOutlet weak var bgnValueLabel: UILabel!
     @IBOutlet weak var bgnFlagLabel: UILabel!
     
+    @IBOutlet weak var cnySymbolLabel: UILabel!
+    @IBOutlet weak var cnyValueLabel: UILabel!
+    @IBOutlet weak var cnyFlagLabel: UILabel!
+    
     @IBOutlet weak var activityView: UIView!
     
     @IBOutlet weak var currencyPicker: UIPickerView!
@@ -86,18 +87,11 @@ class ViewController: UIViewController, UITextFieldDelegate, UIPickerViewDataSou
         
         // get latest currency values
         getTable()
-      //  getConversionTable()
-      //  convertValue = 1
         
         // set up base currency screen items
         baseTextField.text = String(format: "%.02f", (baseCurrency?.rate)!)
         baseSymbol.text = baseCurrency?.symbol
         baseFlag.text = baseCurrency?.flag
-        
-        // set up last updated date
-       // let dateformatter = DateFormatter()
-       // dateformatter.dateFormat = "dd/MM/yyyy hh:mm a"
-       // lastUpdatedDateLabel.text = dateformatter.string(from: lastUpdatedDate)
         
         // display currency info
         self.displayCurrencyInfo()
@@ -112,6 +106,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIPickerViewDataSou
         addDoneButton()
     }
     
+    // Taken from various posts on Stackoverflow
     func addDoneButton(){
         let doneToolbar: UIToolbar = UIToolbar(frame: CGRect(x: 0, y: 0, width: 320, height: 50))
         doneToolbar.barStyle = UIBarStyle.default
@@ -160,6 +155,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIPickerViewDataSou
         currencyDict["PLN"] = Currency(name:"PLN", rate:1, flag:"🇵🇱", symbol: "zł")
         currencyDict["DKK"] = Currency(name:"DKK", rate:1, flag:"🇩🇰", symbol: "kr")
         currencyDict["BGN"] = Currency(name:"BGN", rate:1, flag:"🇧🇬", symbol: "лв")
+        currencyDict["CNY"] = Currency(name:"CNY", rate:1, flag:"🇨🇳", symbol: "元")
     }
     
     func displayCurrencyInfo() {
@@ -208,6 +204,11 @@ class ViewController: UIViewController, UITextFieldDelegate, UIPickerViewDataSou
             bgnValueLabel.text = String(format: "%.02f", c.rate)
             bgnFlagLabel.text = c.flag
         }
+        if let c = currencyDict["CNY"]{
+            cnySymbolLabel.text = c.symbol
+            cnyValueLabel.text = String(format: "%.02f", c.rate)
+            cnyFlagLabel.text = c.flag
+        }
     }
     
     
@@ -231,31 +232,26 @@ class ViewController: UIViewController, UITextFieldDelegate, UIPickerViewDataSou
         let task = session.dataTask(with: request) {data, response, error in
             
             if error == nil{
-                //print(response!)
+                
                 
                 do {
                     let jsonDict = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers) as! [String:Any]
-                    //print(jsonDict)
                     
                     if let ratesData = jsonDict["rates"] as? NSDictionary {
-                        //print(ratesData)
+                        
                         for rate in ratesData{
-                            //print("#####")
+                            
                             let name = String(describing: rate.key)
                             let rate = (rate.value as? NSNumber)?.doubleValue
-                            //var symbol:String
-                            //var flag:String
+                            
+                            
                             
                             switch(name){
                             case "USD":
-                                //symbol = "$"
-                                //flag = "🇺🇸"
                                 let c:Currency  = self.currencyDict["USD"]!
                                 c.rate = rate!
                                 self.currencyDict["USD"] = c
                             case "GBP":
-                                //symbol = "£"
-                                //flag = "🇬🇧"
                                 let c:Currency  = self.currencyDict["GBP"]!
                                 c.rate = rate!
                                 self.currencyDict["GBP"] = c
@@ -287,14 +283,14 @@ class ViewController: UIViewController, UITextFieldDelegate, UIPickerViewDataSou
                                 let c:Currency = self.currencyDict["BGN"]!
                                 c.rate = rate!
                                 self.currencyDict["BGN"] = c
+                            case "CNY":
+                                let c:Currency = self.currencyDict["CNY"]!
+                                c.rate = rate!
+                                self.currencyDict["CNY"] = c
                             default:
                                 print("Ignoring currency: \(String(describing: rate))")
                             }
-                            
-                            /*
-                             let c:Currency = Currency(name: name, rate: rate!, flag: flag, symbol: symbol)!
-                             self.currencyDict[name] = c
-                             */
+                            self.convert()
                         }
                         self.lastUpdatedDate = Date()
                     }
@@ -308,8 +304,8 @@ class ViewController: UIViewController, UITextFieldDelegate, UIPickerViewDataSou
             }
             
         }
-            task.resume()
-            indicator.stopAnimating()
+        task.resume()
+        indicator.stopAnimating()
     }
     
     @IBAction func convert(_ sender: Any? = nil) {
@@ -322,7 +318,8 @@ class ViewController: UIViewController, UITextFieldDelegate, UIPickerViewDataSou
         var resultDKK = 0.0
         var resultEUR = 0.0
         var resultBGN = 0.0
-        
+        var resultCNY = 0.0
+
         
         if let base = Double(baseTextField.text!) {
             convertValue = base
@@ -353,10 +350,10 @@ class ViewController: UIViewController, UITextFieldDelegate, UIPickerViewDataSou
             if let bgn = self.currencyDict["BGN"] {
                 resultBGN = convertValue * bgn.rate
             }
+            if let cny = self.currencyDict["CNY"] {
+                resultCNY = convertValue * cny.rate
+            }
         }
-        //GBP
-        
-        //convertedLabel.text = String(describing: resultGBP)
         
         gbpValueLabel.text = String(format: "%.02f", resultGBP)
         usdValueLabel.text = String(format: "%.02f", resultUSD)
@@ -367,12 +364,14 @@ class ViewController: UIViewController, UITextFieldDelegate, UIPickerViewDataSou
         dkkValueLabel.text = String(format: "%.02f", resultDKK)
         eurValueLabel.text = String(format: "%.02f", resultEUR)
         bgnValueLabel.text = String(format: "%.02f", resultBGN)
+        cnyValueLabel.text = String(format: "%.02f", resultCNY)
     }
     
     @IBAction func refresh(_ sender: Any) {
         getTable()
     }
     
+    // Taken from various posts on Stackoverflow
     @objc func keyboardWillShow(notification: NSNotification) {
         if let keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue{
             if self.view.frame.origin.y == 0{
@@ -389,6 +388,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIPickerViewDataSou
         }
     }
 
+    //Picker view methods inspired from a number of youtube tutorials
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
         return 1
     }
@@ -411,14 +411,6 @@ class ViewController: UIViewController, UITextFieldDelegate, UIPickerViewDataSou
         getConversionTable()
         
         }
-    
-    /*
-     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-     // Get the new view controller using segue.destinationViewController.
-     // Pass the selected object to the new view controller.
-     
-     }
-     */
     
 }
 

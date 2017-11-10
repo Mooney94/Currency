@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		959E23EC1FB5E4010067829D /* go.png in Resources */ = {isa = PBXBuildFile; fileRef = 959E23EB1FB5E4010067829D /* go.png */; };
+		959E23EE1FB5E5220067829D /* Currency-Conversion.png in Resources */ = {isa = PBXBuildFile; fileRef = 959E23ED1FB5E5210067829D /* Currency-Conversion.png */; };
 		95C024561FB4C3A100EF5156 /* arrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 95C024551FB4C3A100EF5156 /* arrow.png */; };
 		95F00B5C1FB3A2B00073CBAA /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95F00B5B1FB3A2B00073CBAA /* ViewController.swift */; };
 		95F00B5F1FB3A6570073CBAA /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 95F00B5D1FB3A6570073CBAA /* Main.storyboard */; };
@@ -18,6 +20,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		959E23EB1FB5E4010067829D /* go.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = go.png; sourceTree = "<group>"; };
+		959E23ED1FB5E5210067829D /* Currency-Conversion.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Currency-Conversion.png"; sourceTree = "<group>"; };
 		95C024551FB4C3A100EF5156 /* arrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = arrow.png; sourceTree = "<group>"; };
 		95F00B5B1FB3A2B00073CBAA /* ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		95F00B5E1FB3A6570073CBAA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -68,6 +72,8 @@
 				FF66C55A1FA34F4D00E9354E /* LaunchScreen.storyboard */,
 				FF66C55D1FA34F4D00E9354E /* Info.plist */,
 				95C024551FB4C3A100EF5156 /* arrow.png */,
+				959E23EB1FB5E4010067829D /* go.png */,
+				959E23ED1FB5E5210067829D /* Currency-Conversion.png */,
 				FF66C5651FA3531400E9354E /* README.md */,
 			);
 			path = Currency;
@@ -137,6 +143,8 @@
 				FF66C5661FA3531400E9354E /* README.md in Resources */,
 				95C024561FB4C3A100EF5156 /* arrow.png in Resources */,
 				95F00B5F1FB3A6570073CBAA /* Main.storyboard in Resources */,
+				959E23EE1FB5E5220067829D /* Currency-Conversion.png in Resources */,
+				959E23EC1FB5E4010067829D /* go.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
