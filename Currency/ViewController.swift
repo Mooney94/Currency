@@ -228,7 +228,6 @@ class ViewController: UIViewController, UITextFieldDelegate, UIPickerViewDataSou
         indicator.startAnimating()
         
         
-        
         let task = session.dataTask(with: request) {data, response, error in
             
             if error == nil{
