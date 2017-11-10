@@ -209,6 +209,7 @@ class ViewController: UIViewController, UITextFieldDelegate {
         let urlStr:String = "https://api.fixer.io/latest"
         
         var request = URLRequest(url: URL(string: urlStr)!)
+        let session = URLSession(configuration: .default)
         request.httpMethod = "GET"
         
         let indicator = UIActivityIndicatorView(activityIndicatorStyle: .gray)
@@ -216,9 +217,8 @@ class ViewController: UIViewController, UITextFieldDelegate {
         view.addSubview(indicator)
         indicator.startAnimating()
         
-        NSURLConnection.sendAsynchronousRequest(request, queue: OperationQueue.main) { response, data, error in
-            
-            indicator.stopAnimating()
+        //NSURLConnection.sendAsynchronousRequest(request, queue: OperationQueue.main) { response, data, error in
+        let task = session.dataTask(with: request) {data, response, error in
             
             if error == nil{
                 //print(response!)
@@ -298,7 +298,8 @@ class ViewController: UIViewController, UITextFieldDelegate {
             }
             
         }
-        
+            task.resume()
+            indicator.stopAnimating()
     }
     
     @IBAction func convert(_ sender: Any? = nil) {
