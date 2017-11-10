@@ -226,7 +226,9 @@ class ViewController: UIViewController, UITextFieldDelegate, UIPickerViewDataSou
         indicator.activityIndicatorViewStyle = UIActivityIndicatorViewStyle.gray
         activityView.addSubview(indicator)
         indicator.startAnimating()
-        //NSURLConnection.sendAsynchronousRequest(request, queue: OperationQueue.main) { response, data, error in
+        
+        
+        
         let task = session.dataTask(with: request) {data, response, error in
             
             if error == nil{
