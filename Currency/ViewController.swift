@@ -8,15 +8,21 @@
 
 import UIKit
 
-class ViewController: UIViewController, UITextFieldDelegate {
+class ViewController: UIViewController, UITextFieldDelegate, UIPickerViewDataSource, UIPickerViewDelegate {
     
     //MARK Model holders
     var currencyDict:Dictionary = [String:Currency]()
     var currencyArray = [Currency]()
-    var baseCurrency:Currency = Currency.init(name:"EUR", rate:1, flag:"🇪🇺", symbol:"€")!
+    var curName : String! = ""
+    var curFlag: String! = ""
+    var curSymbol :String! = ""
+    var baseCurrency:Currency? = nil
+    //var baseCurrency:Currency = Currency(name:curName, rate:curRate, flag:curFlag, symbol:curSymbol)!
     var lastUpdatedDate:Date = Date()
     
     var convertValue:Double = 0
+    
+    let currencies = ["EUR","GBP","USD","JPY","AUD","CAD","PLN","DKK","BGN"]
     
     //MARK Outlets
     //@IBOutlet weak var convertedLabel: UILabel!
@@ -64,9 +70,11 @@ class ViewController: UIViewController, UITextFieldDelegate {
     
     @IBOutlet weak var activityView: UIView!
     
+    @IBOutlet weak var currencyPicker: UIPickerView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        baseCurrency = Currency(name:"EUR", rate:1, flag:"🇪🇺", symbol: "€")
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
         
@@ -82,9 +90,9 @@ class ViewController: UIViewController, UITextFieldDelegate {
       //  convertValue = 1
         
         // set up base currency screen items
-        baseTextField.text = String(format: "%.02f", baseCurrency.rate)
-        baseSymbol.text = baseCurrency.symbol
-        baseFlag.text = baseCurrency.flag
+        baseTextField.text = String(format: "%.02f", (baseCurrency?.rate)!)
+        baseSymbol.text = baseCurrency?.symbol
+        baseFlag.text = baseCurrency?.flag
         
         // set up last updated date
        // let dateformatter = DateFormatter()
@@ -126,9 +134,9 @@ class ViewController: UIViewController, UITextFieldDelegate {
     func getTable(){
         getConversionTable()
         convertValue = 1
-        baseTextField.text = String(format: "%.02f", baseCurrency.rate)
-        baseSymbol.text = baseCurrency.symbol
-        baseFlag.text = baseCurrency.flag
+        baseTextField.text = String(format: "%.02f", (baseCurrency?.rate)!)
+        baseSymbol.text = baseCurrency?.symbol
+        baseFlag.text = baseCurrency?.flag
         let dateformatter = DateFormatter()
         dateformatter.dateFormat = "dd/MM/yyyy hh:mm a"
         lastUpdatedDateLabel.text = dateformatter.string(from: lastUpdatedDate)
@@ -206,17 +214,18 @@ class ViewController: UIViewController, UITextFieldDelegate {
     func getConversionTable() {
         //var result = "<NOTHING>"
         
-        let urlStr:String = "https://api.fixer.io/latest"
+        let urlStr:String = "https://api.fixer.io/latest?base=\(baseCurrency!.name)"
         
         var request = URLRequest(url: URL(string: urlStr)!)
         let session = URLSession(configuration: .default)
         request.httpMethod = "GET"
         
-        let indicator = UIActivityIndicatorView(activityIndicatorStyle: .gray)
+        let indicator: UIActivityIndicatorView = UIActivityIndicatorView()
         indicator.center = activityView.center
-        view.addSubview(indicator)
+        indicator.hidesWhenStopped = true
+        indicator.activityIndicatorViewStyle = UIActivityIndicatorViewStyle.gray
+        activityView.addSubview(indicator)
         indicator.startAnimating()
-        
         //NSURLConnection.sendAsynchronousRequest(request, queue: OperationQueue.main) { response, data, error in
         let task = session.dataTask(with: request) {data, response, error in
             
@@ -313,8 +322,9 @@ class ViewController: UIViewController, UITextFieldDelegate {
         var resultEUR = 0.0
         var resultBGN = 0.0
         
-        if let euro = Double(baseTextField.text!) {
-            convertValue = euro
+        
+        if let base = Double(baseTextField.text!) {
+            convertValue = base
             if let gbp = self.currencyDict["GBP"] {
                 resultGBP = convertValue * gbp.rate
             }
@@ -377,6 +387,30 @@ class ViewController: UIViewController, UITextFieldDelegate {
             }
         }
     }
+
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
+        return 1
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        return currencies[row]
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        return currencies.count
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        var current:Currency
+        current = currencyDict[currencies[row]]!
+        baseSymbol.text = current.symbol
+        baseFlag.text = current.flag
+        baseCurrency = current
+        baseCurrency?.rate = 1
+        getConversionTable()
+        
+        }
+    
     /*
      override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
      // Get the new view controller using segue.destinationViewController.

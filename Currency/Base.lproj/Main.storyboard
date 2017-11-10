@@ -424,12 +424,22 @@
                                     </button>
                                 </subviews>
                             </stackView>
+                            <pickerView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="FtG-50-uvY">
+                                <rect key="frame" x="56" y="1080" width="63" height="60"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="60" id="GLI-T0-LGs"/>
+                                </constraints>
+                                <connections>
+                                    <outlet property="dataSource" destination="BYZ-38-t0r" id="9vP-XY-BIF"/>
+                                    <outlet property="delegate" destination="BYZ-38-t0r" id="Ef6-Zu-7Rh"/>
+                                </connections>
+                            </pickerView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="LrC-Hm-G23">
-                                <rect key="frame" x="187" y="60.333333333333343" width="40" height="40"/>
+                                <rect key="frame" x="182" y="60" width="50" height="50"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="40" id="J7e-uf-yn2"/>
-                                    <constraint firstAttribute="width" constant="40" id="J7i-Uo-aM0"/>
+                                    <constraint firstAttribute="height" constant="50" id="J7e-uf-yn2"/>
+                                    <constraint firstAttribute="width" constant="50" id="J7i-Uo-aM0"/>
                                 </constraints>
                             </view>
                         </subviews>
@@ -453,12 +463,15 @@
                             <constraint firstItem="Chd-YC-XQl" firstAttribute="top" secondItem="b3W-ci-iTU" secondAttribute="bottom" constant="8" symbolic="YES" id="hjg-47-xeA"/>
                             <constraint firstItem="qWU-HA-lfi" firstAttribute="centerY" secondItem="b3W-ci-iTU" secondAttribute="centerY" id="jhK-IV-azm"/>
                             <constraint firstItem="SZQ-sd-p41" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="k9i-UN-oX7"/>
+                            <constraint firstItem="YSD-ti-Knz" firstAttribute="leading" secondItem="FtG-50-uvY" secondAttribute="trailing" constant="7.9999999999999858" id="kZW-dA-2Ic"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="ofz-bQ-OOF" secondAttribute="trailing" constant="20" id="pP2-xg-umn"/>
                             <constraint firstItem="SZQ-sd-p41" firstAttribute="centerX" secondItem="GgA-Eo-4eU" secondAttribute="centerX" id="pVZ-6E-Txa"/>
+                            <constraint firstItem="FtG-50-uvY" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="56" id="pqK-8A-KLb"/>
                             <constraint firstItem="b3W-ci-iTU" firstAttribute="leading" secondItem="qWU-HA-lfi" secondAttribute="trailing" constant="10" id="rKP-mY-30p"/>
                             <constraint firstItem="ofz-bQ-OOF" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="rsF-hB-Y06"/>
                             <constraint firstItem="b3W-ci-iTU" firstAttribute="top" secondItem="SZQ-sd-p41" secondAttribute="bottom" constant="5" id="sx8-Or-KwR"/>
                             <constraint firstItem="LrC-Hm-G23" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="yIa-U5-KbM"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="FtG-50-uvY" secondAttribute="bottom" constant="60" id="yZv-yl-JJh"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
@@ -477,6 +490,7 @@
                         <outlet property="cadFlagLabel" destination="TLS-c5-rRG" id="KwP-CP-XLk"/>
                         <outlet property="cadSymbolLabel" destination="HLQ-wU-Klh" id="Yjl-Gz-kY9"/>
                         <outlet property="cadValueLabel" destination="1gR-t3-FdC" id="R64-8t-kpt"/>
+                        <outlet property="currencyPicker" destination="FtG-50-uvY" id="xFt-dE-vOj"/>
                         <outlet property="dkkFlagLabel" destination="9ci-7d-fTS" id="xaW-jf-Iew"/>
                         <outlet property="dkkSymbolLabel" destination="sWF-3r-KTU" id="0Hl-5a-OAA"/>
                         <outlet property="dkkValueLabel" destination="5Ae-92-7hv" id="sIw-T3-RjK"/>
